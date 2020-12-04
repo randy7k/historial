@@ -1,0 +1,23 @@
+# ignore /settings.py
+historial/settings.py
+
+historial\settings.py
+
+
+# ignore static files
+/static/
+
+# ignore virtual env
+/env/
+
+# ignore all logs
+*.log
+
+# ignore all bd
+*.sqlite3
+
+#ignore migrations
+*.pyc
+/__pycache__/*
+
+.vscode
