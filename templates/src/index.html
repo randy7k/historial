@@ -6,7 +6,61 @@
 {% block content %}
 
 <div class="container">
-    <h1 class="mt-5 pt-5">Historial de usuario</h1>
+    <div class="row">
+        <div class="col-md-12">
+          <h1 class="">Objetivos
+            <button type="button" class="btn btn-secondary">Agregar +</button>
+          </h1>  
+        </div>
+        <div class="col-md-6">
+          <!-- Accordion START -->
+          <div class="panel-group" id="accordion">
+              {% for objetivo in objetivos %}
+              <div class="panel panel-default">
+                  <div class="panel-heading accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{objetivo.id}}">
+                  <h4 class="panel-title">{{ objetivo.metrica }}</h4>
+                  </div>
+                  <div id="collapse{{objetivo.id}}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <p>{{ objetivo.descripcion }}</p>
+                      
+                      <button type="button" class="btn btn-secondary float-right ml-2">Calcular</button>
+                      <button type="button" class="btn btn-danger float-right">Eliminar</button>
+                    </div>
+                    
+                  </div>
+              </div>
+              {% endfor %}
+              {% comment %}                  
+              <div class="panel panel-default">
+                <div class="panel-heading accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne">
+                  <h4 class="panel-title">Test1</h4>
+      
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <p>sadfsadfsdaf sadf</p>
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo">
+                  <h4 class="panel-title">Test2</h4>
+      
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse">
+                  <div class="panel-body">
+                      <p>
+                      Bla bla bla
+                      </p>
+                  </div>
+                </div>
+              </div>
+              {% endcomment %}
+          </div>
+          <!-- Accordion END -->
+        </div>
+    </div>
 </div>
-    
+
 {% endblock content %}

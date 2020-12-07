@@ -1,7 +1,11 @@
 from django.shortcuts import render
-
-# Create your views here.
+from src.models import Objetivo, Consecucion
 
 def index(request):
-    return render(request,'src/index.html', {})
-        
+    objetivos = Objetivo.objects.all()
+    consecuciones = Consecucion.objects.all()
+    return render(request,'src/index.html', {
+        'objetivos': objetivos,
+        'consecuciones': consecuciones,
+    })
+    
