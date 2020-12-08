@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+          <h1 class="">Objetivo
+          </h1>  
+        </div>           
+    </div>
+    
+    
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="_method" value="EditarObjetivo">
+        <input type="hidden" name="id" value="{{objetivo.id}}">
+        <div class="row">
+            <div class="col-md-5">    
+                <div class="form-group">
+                    <label for="id_descripcion">Descripción:</label>    
+                    <textarea class="form-control" name="descripcion" rows="3" maxlength="150" required="" id="id_descripcion">{{ objetivo.descripcion }}</textarea>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="id_metrica">Metrica:</label> 
+                    <input class="form-control" type="text" name="metrica" maxlength="30" required="" id="id_metrica" value="{{ objetivo.metrica }}">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group ">
+                    <button type="submit" class="btn btn-secondary" value="submit">Actualizar</button>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Descripción de meta</th>
+                    <th scope="col">Meta</th>
+                    <th scope="col">% Consecución </th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    {% for consecucion in consecuciones %}
+                    <tr>
+                      <form action="" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="_method" value="EditarConsecucion">
+                      <input type="hidden" name="consecucion_id" value="{{consecucion.id}}">
+                        <th scope="row"></th>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" name="descripcion" class="form-control" maxlength="30" required="" id="id_descripcion" value="{{ consecucion.descripcion}}">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" name="meta" class="form-control" step="any" required="" id="id_meta" value="{{ consecucion.meta}}">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" name="porcentaje_de_consecucion" class="form-control" step="any" required="" id="id_porcentaje_de_consecucion" value="{{ consecucion.porcentaje_de_consecucion}}">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="input-group">
+                                <button type="submit" class="btn btn-secondary" value="submit">Actualizar</button>
+                            </div>
+                        </td>
+                      </form>
+                    </tr>
+                    {% endfor %}
+                    
+                    <tr>
+                        <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="AgregarConsecucion">
+                          <th scope="row"></th>
+                          <td>
+                              <div class="input-group">
+                                  <input type="text" name="descripcion" class="form-control" maxlength="30" required="" id="id_descripcion">
+                              </div>
+                          </td>
+                          <td>
+                              <div class="input-group">
+                                  <input type="number" name="meta" class="form-control" step="any" required="" id="id_meta">
+                              </div>
+                          </td>
+                          <td>
+                              <div class="input-group">
+                                  <input type="number" name="porcentaje_de_consecucion" class="form-control" step="any" required="" id="id_porcentaje_de_consecucion">
+                                  <span class="input-group-addon">%</span>
+                              </div>
+                          </td>
+  
+                          <td>
+                              <div class="input-group">
+                                  <button type="submit" class="btn btn-secondary" value="submit">Agregar +</button>
+                              </div>
+                          </td>
+                        </form>
+                      </tr>
+
+
+                    {% comment %}
+                    <tr>
+                        <th scope="row"></th>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" name="descripcion" class="form-control" maxlength="30" required="" id="id_descripcion">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" name="meta" class="form-control" step="any" required="" id="id_meta">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" name="porcentaje_de_consecucion" class="form-control" step="any" required="" id="id_porcentaje_de_consecucion">
+                                <span class="input-group-addon">%</span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endcomment %}
+
+                </tbody>
+            </table>
+        </div>
+
+        
+        <div class="col-md-4">
+          <form action="" method="post">
+            {% csrf_token %}
+            <table class="table bg-light">
+
+                <thead>
+                  <tr>
+                    <th scope="col">Resultado</th>
+                    <th scope="col">% Consecución </th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="input-group">
+                                <input type="text" name="descripcion" class="form-control" maxlength="30" required="" id="id_descripcion">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group">
+                                <input type="number" name="resultado" class="form-control" disabled>
+                                <button type="button" class="btn btn-secondary mt-2 float-right">Calcular</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+          </form>
+        </div>
+
+
+    </div>
+
+</div>
+
+{% endblock content %}
