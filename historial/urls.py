@@ -16,6 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+
+from django.conf.urls import url,include
+from src import views
+from src import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^$',views.index,name='index'),
+    url(r'^objetivo/(?P<objetivo_id>\d+)$', views.objetivo, name='objetivo'),
+    
+    url(r'^objetivo/nuevo$', views.add_objetivo, name='agregar_objetivo'),
+
+    url(r'^objetivo/(?P<objetivo_id>\d+)/borrar$', views.delete_objetivo, name='borrar_objetivo'),
+
 ]
