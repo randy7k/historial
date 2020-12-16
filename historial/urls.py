@@ -19,15 +19,11 @@ from django.urls import path
 
 from django.conf.urls import url,include
 from src import views
-from src import views
+from src.views import ObjetivoCreateView, ObjetivoUpdateView, ObjetivoDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$',views.index,name='index'),
-    url(r'^objetivo/(?P<objetivo_id>\d+)$', views.objetivo, name='objetivo'),
-    
-    url(r'^objetivo/nuevo$', views.add_objetivo, name='agregar_objetivo'),
-
-    url(r'^objetivo/(?P<objetivo_id>\d+)/borrar$', views.delete_objetivo, name='borrar_objetivo'),
-
+    path('', ObjetivoCreateView.as_view(), name='index'),
+    path('objetivo/<int:pk>/delete', ObjetivoDeleteView.as_view(), name='delete_objetivo'),
+    path('objetivo/<int:objetivo_id>', ObjetivoUpdateView.as_view(), name='update_objetivo'),
 ]

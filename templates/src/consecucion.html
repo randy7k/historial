@@ -5,12 +5,6 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-          <h1 class="">Objetivo
-          </h1>  
-        </div>           
-    </div>
     
     
     <form action="" method="post">
@@ -152,6 +146,7 @@
         <div class="col-md-4">
           <form action="" method="post">
             {% csrf_token %}
+            <input type="hidden" name="_method" value="CalcularConsecucion">
             <table class="table bg-light">
 
                 <thead>
@@ -165,13 +160,13 @@
                     <tr>
                         <td>
                             <div class="input-group">
-                                <input type="text" name="descripcion" class="form-control" maxlength="30" required="" id="id_descripcion">
+                                <input type="number" name="resultado" class="form-control" value="{{ resultado }}" required id="id_calc" min="0" step="0.01" pattern="^\d+(?:\.\d{1,2})?$">
                             </div>
                         </td>
                         <td>
                             <div class="input-group">
-                                <input type="number" name="resultado" class="form-control" disabled>
-                                <button type="button" class="btn btn-secondary mt-2 float-right">Calcular</button>
+                                <input type="number" name="percentage" class="form-control" value="{{ percentage }}" disabled>
+                                <button type="submit" class="btn btn-secondary mt-2 float-right">Calcular</button>
                             </div>
                         </td>
                     </tr>
@@ -181,9 +176,7 @@
           </form>
         </div>
 
-
     </div>
-
 </div>
 
 {% endblock content %}
