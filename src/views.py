@@ -1,34 +1,45 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from src.models import Objetivo, Consecucion
 from src.forms import ObjetivoForm, ConsecucionForm
-from django.views.generic.edit import UpdateView,DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views import View
 
+class ObjetivoCreateView(CreateView):
+    model = Objetivo    
+    template_name = 'src/index.html'
+    context = {}
 
-def index(request):
-    objetivos = Objetivo.objects.all()
-    consecuciones = Consecucion.objects.all()
+    def get(self, request):
+        self.context['objetivos'] = self.model.objects.all()
+        return render(request, self.template_name, self.context)
 
-    if request.method == 'POST':
-        data = request.POST
-        objetivo_form = ObjetivoForm(data)
+    def post(self, request):
+        objetivo_form = ObjetivoForm(request.POST)
         if objetivo_form.is_valid():
             objetivo_form.save()
         else:
             print(objetivo_form.erros)
-    else:
+        self.context['objetivos'] = self.model.objects.all()
+        return render(request, self.template_name, self.context)
+
+class ObjetivoUpdateView(UpdateView):
+    model = Objetivo
+    template_name = "src/consecucion.html"
+    context = {}
+    
+    def get(self, request, *args, **kwargs):
+        self.context['objetivo'] = self.model.objects.get(id=kwargs['objetivo_id'])
+        self.context['objetivo_form'] = ObjetivoForm()
+        self.context['consecuciones'] = Consecucion.objects.filter(objetivo=self.context['objetivo'])
+        self.context['consecucion_form'] = ConsecucionForm()
+        return render(request,'src/consecucion.html', self.context)
+    
+    def post(self, request, *args, **kwargs):
+        objetivo = self.model.objects.get(id=kwargs['objetivo_id'])
         objetivo_form = ObjetivoForm()
+        consecuciones = Consecucion.objects.filter(objetivo=objetivo)
+        consecucion_form = ConsecucionForm()
 
-    return render(request,'src/index.html', {
-        'objetivos': objetivos,
-        'objetivo_form': objetivo_form,
-        'consecuciones': consecuciones,
-    })
-
-def objetivo(request, objetivo_id):
-    objetivo = Objetivo.objects.get(id=objetivo_id)
-    consecuciones = Consecucion.objects.filter(objetivo=objetivo)
-    consecucion_form = ConsecucionForm()
-    if request.method == 'POST':
         data = request.POST
         if data['_method'] == 'EditarObjetivo':
             objetivo_form = ObjetivoForm(data, instance=objetivo)
@@ -52,7 +63,6 @@ def objetivo(request, objetivo_id):
             
         else:
             consecucion_form = ConsecucionForm()
-
         
         if data['_method'] == 'AgregarConsecucion':
             consecucion_form = ConsecucionForm(data)
@@ -66,33 +76,12 @@ def objetivo(request, objetivo_id):
         else:
             consecucion_form = ConsecucionForm()
 
-    else:
-        objetivo_form = ObjetivoForm()
-    return render(request,'src/objetivo.html', {
-        'objetivo': objetivo,
-        'consecuciones': consecuciones,
-        'objetivo_form': objetivo_form,
-        'consecucion_form': consecucion_form,
-    })
+        self.context['objetivo'] = objetivo
+        self.context['objetivo_form'] = objetivo_form
+        self.context['consecuciones'] = consecuciones
+        self.context['consecucion_form'] = consecucion_form
+        return render(request, self.template_name, self.context)
 
-def delete_objetivo(request, objetivo_id):
-    objetivo = Objetivo.objects.get(id=objetivo_id)
-    if objetivo:
-        objetivo.delete()
-    objetivos = Objetivo.objects.all()
-    consecuciones = Consecucion.objects.all()
-    return redirect('index')
-
-def add_objetivo(request):
-    if request.method == 'POST':
-        data = request.POST
-        objetivo_form = ObjetivoForm(data, instance=objetivo)
-        if objetivo_form.is_valid():
-            objetivo.save()
-        else:
-            print(objetivo_form.erros)
-    else:
-        objetivo_form = ObjetivoForm()
-    return render(request,'src/objetivo.html', {
-        'objetivo_form': objetivo_form,
-    })
+class ObjetivoDeleteView(DeleteView):
+    model = Objetivo
+    success_url ="/"
