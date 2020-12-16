@@ -32,6 +32,8 @@ class ObjetivoUpdateView(UpdateView):
         self.context['objetivo_form'] = ObjetivoForm()
         self.context['consecuciones'] = Consecucion.objects.filter(objetivo=self.context['objetivo'])
         self.context['consecucion_form'] = ConsecucionForm()
+        self.context['resultado'] = ''
+        self.context['percentage'] = ''
         return render(request,'src/consecucion.html', self.context)
     
     def post(self, request, *args, **kwargs):
@@ -76,6 +78,11 @@ class ObjetivoUpdateView(UpdateView):
         else:
             consecucion_form = ConsecucionForm()
 
+        if data['_method'] == 'CalcularConsecucion':
+            resultado = data['resultado']
+            self.context['resultado'] = resultado
+            self.context['percentage'] = calc_consecution_percentage(resultado, consecuciones)
+
         self.context['objetivo'] = objetivo
         self.context['objetivo_form'] = objetivo_form
         self.context['consecuciones'] = consecuciones
@@ -85,3 +92,30 @@ class ObjetivoUpdateView(UpdateView):
 class ObjetivoDeleteView(DeleteView):
     model = Objetivo
     success_url ="/"
+
+def is_asc(consecuciones):
+    is_asc = True
+    last = None
+    for consecucion in consecuciones:
+        if last == None:
+            last = consecucion.meta
+        else:
+            if consecucion.meta < last:
+                is_asc = False
+    return is_asc
+
+def calc_consecution_percentage(resultado, consecuciones):
+    output = None
+    if is_asc(consecuciones):
+        for consecucion in consecuciones:
+            if output == None:
+                output = consecucion.porcentaje_de_consecucion
+            if float(resultado) >= float(consecucion.meta):
+                output = consecucion.porcentaje_de_consecucion
+    else:
+        for consecucion in consecuciones:
+            if output == None:
+                output = consecucion.porcentaje_de_consecucion
+            if float(resultado) <= float(consecucion.meta):
+                output = consecucion.porcentaje_de_consecucion
+    return output
